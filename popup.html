@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>PokeVision Scanner</title>
+	<script src="jquery-2.0.2.min.js"></script>
+	<script src="popup.js"></script>
+	<!-- read more about this page here: https://developer.chrome.com/extensions/background_pages.html -->
+  </head>
+  <body style="width:400px;">
+	<h2>PokeVision Scanner</h2>
+	<p>Show pokemon within <input type="number" min="1" max="1000" value="100" id="txtMeters"/> meters of:</p>
+	
+	<div>
+	Latitude: <input id="txtLat" type="text" value="33.774434268927"/>
+	Longitude <input id="txtLon" type="text" value="-84.384722855175"/>
+	</div>
+	
+	<div>
+		<a href="#" id="lnkOpen">Open location in Pokevision.com</a>
+	</div>
+	
+	<br/>
+	
+	<div>
+		<button id="beginScan">Start scanning</button>
+		<button id="stopScan">Stop</button>
+	</div>
+  </body>
+</html>
