@@ -67,18 +67,18 @@ class App {
 	notify(pokemon) {
 		var t = Helpers.getTimeRemaining(pokemon.expiration_time);
 		var title = `A wild ${this._pokemonService.getName(pokemon.pokemonId)} has appeared!`;
-		var message = `Distance: ${Math.round(this.getDistance(pokemon))} meters ${this.getDirection(pokemon)}. Time remaining: ${t.m}:${t.s}`;
+		var message = `Location: ${this.getDistance(pokemon)} meters ${this.getDirection(pokemon)}. \nTime until despawn ${t.m}:${t.s}`;
 		var iconUrl = this._pokemonService.getSpriteUrl(pokemon.pokemonId);
 			
 		this._chromeService.createNotification(title, message, iconUrl);
 	}
 	
 	inRange(pokemon) {
-		return this.getDistance(pokemon) < this.radiusMeters; 
+		return this.getDistance(pokemon) <= this.radiusMeters; 
 	}
 	
 	getDistance(pokemon) {
-		return Helpers.calcCrow(this.latitude, this.longitude, parseFloat(pokemon.latitude), parseFloat(pokemon.longitude))*1000;
+		return Math.round(Helpers.calcCrow(this.latitude, this.longitude, parseFloat(pokemon.latitude), parseFloat(pokemon.longitude))*1000);
 	}
 	
 	getDirection(pokemon) {
