@@ -27,9 +27,19 @@ class Helpers {
 	static getDirection(lat1, lon1, lat2, lon2) {
 		var rads = Math.atan2(Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1), Math.sin(lon2-lon1)*Math.cos(lat2));
 		var degs = rads * (180/Math.PI) + 180;
-		console.log(degs);
+
 		var nearestCompassDir = Math.round(degs / 45) * 45;
-		console.log(nearestCompassDir);
-		return {0: 'East', 45: 'Northeast', 90: 'North', 135: 'Northwest', 180: 'West', 225: 'Southwest', 270: 'South', 315: 'Southeast', 360: 'East'}[nearestCompassDir];
+
+		return {
+			0: 'East', 
+			45: 'Northeast', 
+			90: 'North', 
+			135: 'Northwest', 
+			180: 'West', 
+			225: 'Southwest', 
+			270: 'South', 
+			315: 'Southeast', 
+			360: 'East'
+		}[nearestCompassDir];
 	}
 }
