@@ -1,33 +1,64 @@
-scanInterval = null;
 
 $(function(){
 	chrome.runtime.getBackgroundPage(function (bp) {
-		$('#txtLat').val(bp.latitude);
-		$('#txtLon').val(bp.longitude);
-		$('#txtMeters').val(bp.radiusMeters);
+		$('#txtLat').val(bp.App.latitude);
+		$('#txtLon').val(bp.App.longitude);
+		$('#txtMeters').val(bp.App.radiusMeters);
 		
-		$('#beginScan').prop('disabled', bp.scanning);
-		$('#stopScan').prop('disabled', !bp.scanning);
-
+		
+		if(bp.App.error === 1)
+		    $('#error').show();
+		else
+			$('#error').hide();
+		
+		if(bp.App.error === 2)
+		    $('#error2').show();
+		else
+			$('#error2').hide();
+		
+		
+		
+		if(bp.App.isScanning) {
+			$('#beginScan').hide();
+			$('#stopScan').show();
+			$('#checking').show();
+		}
+		else {
+			$('#beginScan').show();
+			$('#stopScan').hide();
+			$('#checking').hide();
+		}
 	});
 	//get stae from background and initialize buttons
 	
   $('#beginScan').click(function() {
-	$(this).prop('disabled', true);
-	$('#stopScan').prop('disabled', false);
+	$(this).hide();
+	$('#stopScan').show();
+	$('#checking').show();
 	
 	toggleScan(true);
   });
   
   $('#stopScan').click(function() {
-	  $(this).prop('disabled', true);
-	  $('#beginScan').prop('disabled', false);
+	  $(this).hide();
+	  $('#beginScan').show();
+	  $('#checking').hide();
+	  $('#error').hide();
 	  
-	  toggleScan();
+	  toggleScan(false);
   });
   
   $('#lnkOpen').click(openPokevision);
   
+  $('#lnkLocation').click(() => {	
+		$('#lnkLocation').hide();
+		$('#latlon').show();
+  });
+  
+  $('.param').keyup(function(){
+	$('#stopScan').click();
+  });
+
 });
 
 
@@ -35,10 +66,12 @@ $(function(){
 
 function toggleScan(start) {
 	chrome.runtime.sendMessage({
-		start: start,
-		latitude: $('#txtLat').val(),
-		longitude: $('#txtLon').val(),
-		radius: $('#txtMeters').val()
+		start: (start ? {
+			latitude: parseFloat($('#txtLat').val()),
+			longitude: parseFloat($('#txtLon').val()),
+			radius: parseInt($('#txtMeters').val())
+		} : false),
+		stop: !start,
 	}, function(){});
 }
 
@@ -48,3 +81,19 @@ function openPokevision() {
 	}, function(){});
 
 }
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+	switch(message.error) {
+		case 1: 
+			$('#error').show();
+			$('#error2').hide();
+			break;
+		case 2: 
+			$('#error2').show();
+			$('#error').hide();
+			break;
+		default:		
+			$('#error').hide();
+			$('#error2').hide();
+	}
+});

@@ -1,29 +1,37 @@
 <!doctype html>
 <html>
   <head>
-    <title>PokeVision Scanner</title>
+    <title>Pokemon Go: Spawn Monitor</title>
 	<script src="jquery-2.0.2.min.js"></script>
 	<script src="popup.js"></script>
 	<!-- read more about this page here: https://developer.chrome.com/extensions/background_pages.html -->
   </head>
   <body style="width:400px;">
-	<h2>PokeVision Scanner</h2>
-	<p>Show pokemon within <input type="number" min="1" max="1000" value="100" id="txtMeters"/> meters of:</p>
+	<h2>Pokemon Go: Spawn Monitor</h2>
+	<p>Show pokemon spawns within <input type="number" min="1" max="1000" maxlength="4" value="100" id="txtMeters" style="width:48px;" class="param"/> meters of <a href="#" id="lnkLocation">your current location</a></p>
 	
-	<div>
-	Latitude: <input id="txtLat" type="text" value="33.774434268927"/>
-	Longitude <input id="txtLon" type="text" value="-84.384722855175"/>
-	</div>
-	
-	<div>
-		<a href="#" id="lnkOpen">Open location in Pokevision.com</a>
+	<div id="latlon" style="display:none;">
+		<div>
+		Latitude: <input id="txtLat" type="text" value="33.774434268927" class="param"/>
+		</div>
+		<div>
+		Longitude: <input id="txtLon" type="text" value="-84.384722855175" class="param"/>
+		</div>
 	</div>
 	
 	<br/>
 	
 	<div>
-		<button id="beginScan">Start scanning</button>
-		<button id="stopScan">Stop</button>
+		<button id="beginScan">Start Scanning</button>
+		<span id="checking" style="color:Green;">&nbsp; Checking for new pokemon every 30 seconds. &nbsp;</span>
+		<button id="stopScan">Stop Scanning</button>
+	</div>
+	<p id="error" style="color:Red;">Failed to retrieve a response from PokeVision.com. PokeVision may be down for maintenance.</p>
+	
+	<p id="error2" style="color:Red;">No pokemon found. PokeVision is either down or your location has no nearby Pokemon.</p>
+	<br />
+	<div>
+		<a href="#" id="lnkOpen">Open in PokeVision.com</a>
 	</div>
   </body>
 </html>

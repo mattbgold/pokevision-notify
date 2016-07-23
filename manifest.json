@@ -1,6 +1,6 @@
 {
-  "name": "PokeVision Scanner",
-  "version": "1.0.4",
+  "name": "Pokemon Go: Spawn Monitor",
+  "version": "1.0.7",
   "description": "Scans PokeVision.com and creates desktop notification for new pokemon spawns",
   "manifest_version": 2,
   "browser_action": {
@@ -10,14 +10,12 @@
 	"default_popup": "popup.html"	
   },
   "background": {
-	"scripts":["jquery-2.0.2.min.js", "background.js"]
+	"scripts":["jquery-2.0.2.min.js", "App/App.js", "App/helpers.js", "App/PokemonService.js", "App/ChromeService.js", "background.js"]
   },
    "permissions": [
-   "geolocation",
+    "geolocation",
 	"notifications",
-	"<all_urls>"
-    //"https://pokevision.com/*",
-    //"http://pokevision.com/*",
-	//"http://ugc.pokevision.com/*"
+	"http://ugc.pokevision.com/*",
+	"https://pokevision.com/*"
     ]
 }
