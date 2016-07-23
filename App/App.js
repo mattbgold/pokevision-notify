@@ -3,11 +3,10 @@ class App {
 		this._pokemonService = pokemonService;
 		this._chromeService = chromeService;
 		
-		this.pokeCache = {};
+		this._pokeCache = {};
+		this._scanInterval = null;
 		
 		this.isScanning = false;
-		this.scanInterval = null;
-		
 		this.latitude = 33.774434268927;
 		this.longitude = -84.384722855175;
 		this.radiusMeters = 200;
@@ -21,17 +20,17 @@ class App {
 			this.radiusMeters = data.radius;
 		
 			this.isScanning = true;
-			this.pokeCache = {};
+			this._pokeCache = {};
 			
-			this.scanInterval = setInterval(() => this.scan(), 30000);
+			this._scanInterval = setInterval(() => this.scan(), 30000);
 			this.scan();
 		});
 		
 		this._chromeService.addListener('stop', () => {
 			this.isScanning = false;
-			this.pokeCache = {};
+			this._pokeCache = {};
 			
-			clearInterval(this.scanInterval);
+			clearInterval(this._scanInterval);
 		});
 		
 		this._chromeService.addListener('pokevision', () => {
@@ -55,13 +54,13 @@ class App {
 		
 		var newMons = {};
 		pokemon.forEach(p => {
-			if(!this.pokeCache[p.id] && this.inRange(p)) {
+			if(!this._pokeCache[p.id] && this.inRange(p)) {
 				this.notify(p);
 			}
 			newMons[p.id] = true;
 		});
 
-		this.pokeCache = newMons;
+		this._pokeCache = newMons;
 	}
 	
 	notify(pokemon) {
