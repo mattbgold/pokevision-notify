@@ -9,7 +9,7 @@ class App {
 		this.isScanning = false;
 		this.latitude = 33.774434268927;
 		this.longitude = -84.384722855175;
-		this.radiusMeters = 200;
+		this.radiusMeters = 500;
 		
 		this.error = 0;
 		

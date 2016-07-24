@@ -1,37 +1,58 @@
 <!doctype html>
 <html>
   <head>
-    <title>Pokemon Go: Spawn Monitor</title>
+    <title>Pokemon Go: Spawn Notifications</title>
 	<script src="jquery-2.0.2.min.js"></script>
 	<script src="popup.js"></script>
-	<!-- read more about this page here: https://developer.chrome.com/extensions/background_pages.html -->
+	<link rel="stylesheet" href="bootstrap.min.css"/>
+	<link rel="stylesheet" href="bootstrap-theme.min.css"/>
+	<style>
+		.meters {
+			display:inline-block;
+			width:78px;
+		}
+	</style>
   </head>
-  <body style="width:400px;">
-	<h2>Pokemon Go: Spawn Monitor</h2>
-	<p>Show pokemon spawns within <input type="number" min="1" max="1000" maxlength="4" value="100" id="txtMeters" style="width:48px;" class="param"/> meters of <a href="#" id="lnkLocation">your current location</a></p>
-	
-	<div id="latlon" style="display:none;">
-		<div>
-		Latitude: <input id="txtLat" type="text" value="33.774434268927" class="param"/>
-		</div>
-		<div>
-		Longitude: <input id="txtLon" type="text" value="-84.384722855175" class="param"/>
+  <body style="min-width:500px;">
+  <nav class="navbar navbar-default">
+	<div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<img src="icon.png" class="pull-left" style="height:30px; margin: 10px 0 10px 10px;"/>
+			<a class="navbar-brand" href="#"> Pokemon Go: Spawn Notifications</a>
 		</div>
 	</div>
-	
-	<br/>
-	
-	<div>
-		<button id="beginScan">Start Scanning</button>
-		<span id="checking" style="color:Green;">&nbsp; Checking for new pokemon every 30 seconds. &nbsp;</span>
-		<button id="stopScan">Stop Scanning</button>
-	</div>
-	<p id="error" style="color:Red;">Failed to retrieve a response from PokeVision.com. PokeVision may be down for maintenance.</p>
-	
-	<p id="error2" style="color:Red;">No pokemon found. PokeVision is either down or your location has no nearby Pokemon.</p>
-	<br />
-	<div>
-		<a href="#" id="lnkOpen">Open in PokeVision.com</a>
+	</nav>
+	<div class="container">
+
+		<p>Show pokemon spawns within <input type="text" maxlength="4" value="100" id="txtMeters" class="param meters form-control"/> meters of <a href="#" id="lnkLocation">your current location</a></p>
+		
+		<div id="latlon" class="well" style="display:none;">
+			<div class="form-group">
+				<label for="txtLat">Latitude</label>
+				<input type="text" class="form-control param" id="txtLat" />
+			</div>
+
+			<div class="form-group">
+				<label for="txtLon">Longitude:</label>
+				<input id="txtLon" type="text" class="param form-control"/>
+			</div>
+		</div>
+		
+		<br/>
+		
+		<div>
+			<button id="beginScan" class="btn btn-default">Start Scanning</button>
+			<span id="checking" class="text-success">&nbsp; Checking for new pokemon every 30 seconds. &nbsp;</span>
+			<button id="stopScan" class="btn btn-default">Stop Scanning</button>
+		</div>
+		
+		<p id="error" class="text-danger">Failed to retrieve a response from PokeVision.com. PokeVision may be down for maintenance.</p>
+		<p id="error2" class="text-danger">No pokemon found. PokeVision is either down or your location has no nearby Pokemon.</p>
+		
+		<div class="pull-right">
+			<a href="#" id="lnkOpen" class="btn btn-link">Open in PokeVision.com</a>
+		</div>
 	</div>
   </body>
 </html>
