@@ -1,6 +1,6 @@
 {
   "name": "Pokemon Go: Spawn Notifications",
-  "version": "1.0.9",
+  "version": "1.1.2",
   "description": "Scans PokeVision.com and creates desktop notifications when Pokemon spawn near you.",
   "manifest_version": 2,
   "browser_action": {

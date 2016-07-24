@@ -20,7 +20,7 @@ class PokemonService {
 			.then(jobId => {
 				return Helpers.delay(3000).then(() => 
 					Helpers.runFunctionWithRetriesAndMaxTimeout(() => 
-						this._getPokemon(latitude, longitude, jobId), 3000 /* start at 3s per try */, 1000 /* inc by 1s */, 10000 /* max 10s */));
+						this._getPokemon(latitude, longitude, jobId), 3000 /* start at 3s per try */, 1000 /* inc by 1s */, 20000 /* max 20s */));
 			});
 	}
 	

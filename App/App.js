@@ -93,6 +93,10 @@ class App {
 	}
 	
 	handleError(err) {
+		if (typeof err === 'object') {
+			err = 'The scan request took too long. The servers may be overloaded.';
+		}
+		
 		this.error = err;
 		this._chromeService.reportError(err);
 	}
