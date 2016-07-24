@@ -20,21 +20,18 @@ $(function(){
 		
 		if(bp.App.isScanning) {
 			$('#beginScan').hide();
-			$('#stopScan').show();
-			$('#checking').show();
+			$('.scan-in-progress').show();
 		}
 		else {
 			$('#beginScan').show();
-			$('#stopScan').hide();
-			$('#checking').hide();
+			$('.scan-in-progress').hide();
 		}
 	});
 	//get stae from background and initialize buttons
 	
   $('#beginScan').click(function() {
 	$(this).hide();
-	$('#stopScan').show();
-	$('#checking').show();
+	$('.scan-in-progress').show();
 	
 	toggleScan(true);
   });
@@ -42,8 +39,7 @@ $(function(){
   $('#stopScan').click(function() {
 	  $(this).hide();
 	  $('#beginScan').show();
-	  $('#checking').hide();
-	  $('#error').hide();
+	  $('.scan-in-progress').hide();
 	  
 	  toggleScan(false);
   });

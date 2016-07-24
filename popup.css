@@ -1,0 +1,80 @@
+body {
+	width:400px;
+	background: #EEE;
+}
+.card {
+	box-shadow: 2px 2px 2px 0 #DDD;
+		margin:20px;
+}
+.meters {
+	display:inline-block;
+	width:78px;
+	margin:0 4px;
+}
+.container {
+	background: White;
+	padding:20px;
+	margin-bottom: 0;
+}
+.btn-lg {
+	width:100%;
+}
+.alert-danger {
+	background:#d32026;
+}
+
+
+/*spinner*/
+
+.spinner {
+  margin: 0 auto;
+  margin-bottom:10px;
+  width: 120px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #2780e3;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.64s;
+  animation-delay: -0.64s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.48s;
+  animation-delay: -0.48s;
+}
+.spinner .bounce3 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce4 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+	-webkit-transform: scale(0);
+	transform: scale(0);
+  } 40% { 
+	-webkit-transform: scale(1.0);
+	transform: scale(1.0);
+  }
+}
