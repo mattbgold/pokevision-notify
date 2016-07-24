@@ -8,14 +8,7 @@ class ChromeService {
 	}
 	
 	reportError(err) {
-		if(typeof err === 'number') {
-			chrome.runtime.sendMessage({error: err});
-			return err;
-		}
-		else {
-			console.error(err);
-			return 1;
-		}	
+		chrome.runtime.sendMessage({error: err});	
 	}
 	
 	createNotification(title, message, iconUrl) {

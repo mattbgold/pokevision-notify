@@ -3,8 +3,12 @@ body {
 	background: #EEE;
 }
 .card {
-	box-shadow: 2px 2px 2px 0 #DDD;
-		margin:20px;
+	box-shadow: 2px 2px 2px 0 #CCC;
+		margin:12px 20px 0 20px;
+		
+}
+.navbar {
+	margin-bottom: 0;
 }
 .meters {
 	display:inline-block;

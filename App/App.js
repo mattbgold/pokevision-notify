@@ -11,7 +11,7 @@ class App {
 		this.longitude = -84.384722855175;
 		this.radiusMeters = 500;
 		
-		this.error = 0;
+		this.error = '';
 		
 		
 		this._chromeService.addListener('start', data => {
@@ -22,7 +22,7 @@ class App {
 			this.isScanning = true;
 			this._pokeCache = {};
 			
-			this._scanInterval = setInterval(() => this.scan(), 30000);
+			this._scanInterval = setInterval(() => this.scan(), 35000);
 			this.scan();
 		});
 		
@@ -46,14 +46,19 @@ class App {
 	scan() {
 		this._pokemonService.get(this.latitude, this.longitude)
 			.then(pokemon => this.processNewPokemon(pokemon))
-			.catch(err => this.handleError(err));
+			.catch(err => this.handleError(err || 'Failed to retrieve a response from PokeVision.com. PokeVision may be down for maintenance.'));
 	}
 	
 	processNewPokemon(pokemon) {
 		if(pokemon.length)
-			this.handleError(0); //success, clear errors;
-		else
-			this.handleError(2); //no pokemon
+			this.handleError(''); //success, clear errors;
+		else if (pokemon === 'throttle') {
+			this.handleError('Requests are being throttled by Pokevision.com. Try scanning again later.');
+		} 
+		else {
+			this.handleError('No pokemon found. PokeVision is either down or your location has no nearby Pokemon.');
+		}
+			
 		
 		var newMons = {};
 		pokemon.forEach(p => {
@@ -88,6 +93,7 @@ class App {
 	}
 	
 	handleError(err) {
-		this.error = this._chromeService.reportError(err);
+		this.error = err;
+		this._chromeService.reportError(err);
 	}
 }

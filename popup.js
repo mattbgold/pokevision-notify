@@ -5,18 +5,10 @@ $(function(){
 		$('#txtLon').val(bp.App.longitude);
 		$('#txtMeters').val(bp.App.radiusMeters);
 		
-		
-		if(bp.App.error === 1)
-		    $('#error').show();
+		if(bp.App.error) 
+		    $('#error').text(bp.App.error).show();
 		else
 			$('#error').hide();
-		
-		if(bp.App.error === 2)
-		    $('#error2').show();
-		else
-			$('#error2').hide();
-		
-		
 		
 		if(bp.App.isScanning) {
 			$('#beginScan').hide();
@@ -79,17 +71,9 @@ function openPokevision() {
 }
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-	switch(message.error) {
-		case 1: 
-			$('#error').show();
-			$('#error2').hide();
-			break;
-		case 2: 
-			$('#error2').show();
-			$('#error').hide();
-			break;
-		default:		
-			$('#error').hide();
-			$('#error2').hide();
+	if(message.error) {
+		$('#error').text(message.error).show();
+	} else {
+		$('#error').hide();
 	}
 });

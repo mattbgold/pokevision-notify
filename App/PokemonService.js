@@ -18,9 +18,9 @@ class PokemonService {
 	get(latitude, longitude) {
 		return this._scan(latitude, longitude)
 			.then(jobId => {
-				return Helpers.delay(3000).then(() => Helpers.runFunctionWithRetriesAndMaxTimeout(() => {
-					return this._getPokemon(latitude, longitude, jobId);
-				}, 3000 /* start at 3s per try */, 1000 /* inc by 1s */, 10000 /* max 10s */));
+				return Helpers.delay(3000).then(() => 
+					Helpers.runFunctionWithRetriesAndMaxTimeout(() => 
+						this._getPokemon(latitude, longitude, jobId), 3000 /* start at 3s per try */, 1000 /* inc by 1s */, 10000 /* max 10s */));
 			});
 	}
 	
@@ -29,27 +29,36 @@ class PokemonService {
 			$.get(`https://pokevision.com/map/scan/${latitude}/${longitude}`)
 				.done(result => {
 					if(typeof result === "string") {
-						return reject(1);
+						return reject();
 					}
 					
 					resolve(result.jobId);
-				}).fail(() => reject(1));
+				}).fail(() => reject());
 		});
 	}
 	
 	_getPokemon(latitude, longitude, jobId) {
+		var url = `https://pokevision.com/map/data/${latitude}/${longitude}`;
+		
+		if(jobId) {
+			url += '/' + jobId;
+		}
+		
 		return new Promise((resolve, reject) => {
-			$.get(`https://pokevision.com/map/data/${latitude}/${longitude}/${jobId || ''}`)
-				.done(result => {
-					if(typeof result === "string") {
-						return reject(1);
+			$.get(url).done(result => {
+				if(result.status === 'success') {
+					if(result.jobStatus === 'in_progress') {
+						return reject();
 					}
-					else if(result.jobStatus === 'in_progress') {
-						return reject(3);
-					}
-					
 					resolve(result.pokemon);
-				}).fail(() => reject(1));
+				}
+				else if (result.message === '{scan-throttle}') {
+					resolve('throttle');
+				}
+				else
+					reject();
+				
+			}).fail(() => reject());
 		});
 	}
 }
