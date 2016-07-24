@@ -50,7 +50,10 @@ class App {
 	}
 	
 	processNewPokemon(pokemon) {
-		this.handleError(0); //success, clear errors;
+		if(pokemon.length)
+			this.handleError(0); //success, clear errors;
+		else
+			this.handleError(2); //no pokemon
 		
 		var newMons = {};
 		pokemon.forEach(p => {

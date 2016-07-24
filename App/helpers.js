@@ -42,4 +42,43 @@ class Helpers {
 			360: 'East'
 		}[nearestCompassDir];
 	}
+	
+	
+	// Promise helpers pulled from: http://stackoverflow.com/a/26694807/2619972
+	// Helper delay function to wait a specific amount of time.
+	static delay(time){
+		return new Promise((resolve) => {
+			setTimeout(resolve, time);
+		});
+	}
+
+	// A function to just keep retrying forever.
+	static runFunctionWithRetries(func, initialTimeout, increment){
+		return func().catch(function(err){
+			return Helpers.delay(initialTimeout).then(function(){
+				return Helpers.runFunctionWithRetries(
+						func, initialTimeout + increment, increment);
+			});
+		});
+	}
+
+	// Helper to retry a function, with incrementing and a max timeout.
+	static runFunctionWithRetriesAndMaxTimeout(
+			func, initialTimeout, increment, maxTimeout){
+
+		var overallTimeout = Helpers.delay(maxTimeout).then(function(){
+			// Reset the function so that it will succeed and no 
+			// longer keep retrying.
+			func = function(){ return Promise.resolve() };
+			throw new Error('Function hit the maximum timeout');
+		});
+
+		// Keep trying to execute 'func' forever.
+		var operation = Helpers.runFunctionWithRetries(function(){
+			return func();
+		}, initialTimeout, increment);
+
+		// Wait for either the retries to succeed, or the timeout to be hit.
+		return Promise.race([operation, overallTimeout]);
+	}
 }

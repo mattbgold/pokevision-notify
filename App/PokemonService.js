@@ -16,20 +16,40 @@ class PokemonService {
 	}
 	
 	get(latitude, longitude) {
+		return this._scan(latitude, longitude)
+			.then(jobId => {
+				return Helpers.delay(3000).then(() => Helpers.runFunctionWithRetriesAndMaxTimeout(() => {
+					return this._getPokemon(latitude, longitude, jobId);
+				}, 3000 /* start at 3s per try */, 1000 /* inc by 1s */, 10000 /* max 10s */));
+			});
+	}
+	
+	_scan(latitude, longitude) {
 		return new Promise((resolve, reject) => {
-			$.get(`https://pokevision.com/map/data/${latitude}/${longitude}`)
-				.done(data => {
-					if(typeof data === "string") {
+			$.get(`https://pokevision.com/map/scan/${latitude}/${longitude}`)
+				.done(result => {
+					if(typeof result === "string") {
 						return reject(1);
 					}
-					else if (!data.pokemon || data.pokemon.length == 0) {
-						return reject(2);
+					
+					resolve(result.jobId);
+				}).fail(() => reject(1));
+		});
+	}
+	
+	_getPokemon(latitude, longitude, jobId) {
+		return new Promise((resolve, reject) => {
+			$.get(`https://pokevision.com/map/data/${latitude}/${longitude}/${jobId || ''}`)
+				.done(result => {
+					if(typeof result === "string") {
+						return reject(1);
+					}
+					else if(result.jobStatus === 'in_progress') {
+						return reject(3);
 					}
 					
-					resolve(data.pokemon);
-				}).fail(() => {
-					reject(1);
-				});
+					resolve(result.pokemon);
+				}).fail(() => reject(1));
 		});
 	}
 }
