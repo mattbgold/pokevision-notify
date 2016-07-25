@@ -1,14 +1,10 @@
 class PokemonServiceStub {
-	constructor(code) {
-		this.code = code;
+	getName(id) {
+		return [null, 'Bulbasaur', 'Ivysaur'][id];
 	}
 	
-	getName() {
-		return 'Bulbasaur';
-	}
-	
-	getSpriteUrl() {
-		return `http://ugc.pokevision.com/images/pokemon/1.png`;
+	getSpriteUrl(id) {
+		return `http://ugc.pokevision.com/images/pokemon/${id}.png`;
 	}
 	
 	getPokevisionUrl(lat, lon) {
@@ -16,8 +12,18 @@ class PokemonServiceStub {
 	}
 	
 	get(latitude, longitude) {
-		return new Promise((resolve, reject) => {
-			reject(this.code);
-		});
+		return Promise.resolve([{
+			id: 1,
+			pokemonId: 1,
+			latitude: 33.7745567,
+			longitude: -84.3854958,
+			expiration_time: new Date().getTime() + 10000
+		}, {
+			id: 2,
+			pokemonId: 2,
+			latitude: 33.7745567,
+			longitude: -84.3854958,
+			expiration_time: new Date().getTime() + 10000
+		}]);
 	}
 }

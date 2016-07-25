@@ -11,18 +11,27 @@ class ChromeService {
 		chrome.runtime.sendMessage({error: err});	
 	}
 	
-	createNotification(title, message, iconUrl) {
+	createNotification(notificationId, title, message, iconUrl, buttons) {
 		var opt = {
 		    type: "basic",
 		    title: title,
 			message: message,
-			iconUrl: iconUrl
+			iconUrl: iconUrl,
+			buttons: buttons
 		};
-		chrome.notifications.create("", opt, (id) => {
+		chrome.notifications.create(notificationId.toString(), opt, (id) => {
 		   if(chrome.runtime.lastError) {
 			 console.error(chrome.runtime.lastError.message);
 		   }
 		});
+	}
+	
+	clearNotification(notificationId) {
+		chrome.notifications.clear(notificationId.toString());
+	}
+	
+	addNotificationListener(callback) {
+		chrome.notifications.onButtonClicked.addListener(callback);
 	}
 	
 	getGeolocation() {
@@ -38,5 +47,15 @@ class ChromeService {
 	
 	openTab(url) {
 		chrome.tabs.create({ url: url });
+	}
+	
+	storageSet(key, val) {
+		var obj = {};
+		obj[key] = val;
+		chrome.storage.sync.set(obj, function(){});
+	}
+	
+	storageGet(key, callback) {
+		return chrome.storage.sync.get(key, (result) => callback(result[key]));
 	}
 }

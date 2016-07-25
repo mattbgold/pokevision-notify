@@ -1,5 +1,7 @@
 
 $(function(){
+	var pokemonAreIgnored = false;
+	
 	chrome.runtime.getBackgroundPage(function (bp) {
 		$('#txtLat').val(bp.App.latitude);
 		$('#txtLon').val(bp.App.longitude);
@@ -10,19 +12,33 @@ $(function(){
 		else
 			$('#error').hide();
 		
+		if(Object.keys(bp.App.pokemonToIgnore).length) {
+			pokemonAreIgnored = true;
+		}
+		
 		if(bp.App.isScanning) {
 			$('#beginScan').hide();
 			$('.scan-in-progress').show();
+			if(!pokemonAreIgnored) {
+				$('#resetIgnore').hide();
+			}
+			else {
+				$('#resetIgnore').show();
+			}
 		}
 		else {
 			$('#beginScan').show();
 			$('.scan-in-progress').hide();
+			$('#resetIgnore').hide();
 		}
 	});
 	//get stae from background and initialize buttons
 	
   $('#beginScan').click(function() {
 	$(this).hide();
+	if(pokemonAreIgnored) {
+		$('#resetIgnore').show();
+	}
 	$('.scan-in-progress').show();
 	
 	toggleScan(true);
@@ -32,9 +48,12 @@ $(function(){
 	  $(this).hide();
 	  $('#beginScan').show();
 	  $('.scan-in-progress').hide();
+	  $('#resetIgnore').hide();
 	  
 	  toggleScan(false);
   });
+  
+  $('#resetIgnore').click(resetIgnore);
   
   $('#lnkOpen').click(openPokevision);
   
@@ -68,6 +87,13 @@ function openPokevision() {
 		pokevision: true
 	}, function(){});
 
+}
+
+function resetIgnore() {
+	$('#resetIgnore').hide();
+	chrome.runtime.sendMessage({
+		resetIgnore: true
+	}, function(){});
 }
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {

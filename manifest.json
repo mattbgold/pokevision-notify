@@ -1,6 +1,6 @@
 {
   "name": "Pokemon Go: Spawn Notifications",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Scans PokeVision.com and creates desktop notifications when Pokemon spawn near you.",
   "manifest_version": 2,
   "browser_action": {
@@ -10,11 +10,12 @@
 	"default_popup": "popup.html"	
   },
   "background": {
-	"scripts":["jquery-2.0.2.min.js", "App/App.js", "App/helpers.js", "App/PokemonService.js", "App/ChromeService.js", "background.js"]
+	"scripts":["jquery-2.0.2.min.js", "App/App.js", "App/helpers.js", "App/PokemonService.js", "App/PokemonServiceStub.js", "App/ChromeService.js", "background.js"]
   },
    "permissions": [
     "geolocation",
 	"notifications",
+	"storage",
 	"http://ugc.pokevision.com/*",
 	"https://pokevision.com/*"
     ]
