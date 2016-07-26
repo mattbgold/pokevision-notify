@@ -5,7 +5,6 @@ body {
 .card {
 	box-shadow: 2px 2px 2px 0 #CCC;
 		margin:12px 20px 0 20px;
-		
 }
 .navbar {
 	margin-bottom: 0;
@@ -27,6 +26,13 @@ body {
 	background:#d32026;
 }
 
+.nearby-pokemon {
+	padding-top:0;
+}
+.nearby-pokemon-list {
+	margin:0 auto;
+	width:288px;
+}
 
 /*spinner*/
 

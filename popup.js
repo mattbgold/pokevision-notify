@@ -31,6 +31,8 @@ $(function(){
 			$('.scan-in-progress').hide();
 			$('#resetIgnore').hide();
 		}
+		
+		appendNearbyPokemon(bp.App.pokeCache);
 	});
 	//get stae from background and initialize buttons
 	
@@ -65,7 +67,6 @@ $(function(){
   $('.param').keyup(function(){
 	$('#stopScan').click();
   });
-
 });
 
 
@@ -96,10 +97,30 @@ function resetIgnore() {
 	}, function(){});
 }
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-	if(message.error) {
-		$('#error').text(message.error).show();
+var chromeService = new ChromeService();
+chromeService.addListener('error', (err) => {
+	if(err) {
+		$('#error').text(err).show();
 	} else {
 		$('#error').hide();
 	}
 });
+
+chromeService.addListener('nearbyPokemon', pokemon => {
+	console.log(pokemon);
+	appendNearbyPokemon(pokemon);
+});
+
+function appendNearbyPokemon(pokemon) {
+	$('.nearby-pokemon-list').empty();
+	var show = false;
+	for(var id in pokemon) {
+		show = true;
+		$('.nearby-pokemon-list').append(`<img src="http://ugc.pokevision.com/images/pokemon/${pokemon[id]}.png"/>`);
+	}
+	if(show) 
+		$('.nearby-pokemon').slideDown();
+	else {
+		$('.nearby-pokemon').hide();
+	}
+}

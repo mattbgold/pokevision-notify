@@ -1,17 +1,17 @@
 class App {
-	constructor(pokemonService, chromeService) {
+	constructor(pokemonService, ioService) {
 		this._pokemonService = pokemonService;
-		this._chromeService = chromeService;
+		this._ioService = ioService;
 		
-		this._pokeCache = {};
 		this._scanInterval = null;
 		this._pokemonNotifications = {};
 		
+		this.pokeCache = {};
 		this.isScanning = false;
 		this.latitude = 33.774434268927;
 		this.longitude = -84.384722855175;
 		this.radiusMeters = 500;
-		this._chromeService.storageGet('pokemonToIgnore', result =>  {
+		this._ioService.storageGet('pokemonToIgnore', result =>  {
 			this.pokemonToIgnore = result || {};
 		});
 		
@@ -19,42 +19,42 @@ class App {
 		this.error = '';
 		
 		
-		this._chromeService.addListener('start', data => {
+		this._ioService.addListener('start', data => {
 			this.latitude = data.latitude;
 			this.longitude = data.longitude;
 			this.radiusMeters = data.radius;
 		
 			this.isScanning = true;
-			this._pokeCache = {};
+			this.pokeCache = {};
 			
 			this._scanInterval = setInterval(() => this.scan(), 35000);
 			this.scan();
 		});
 		
-		this._chromeService.addListener('stop', () => {
+		this._ioService.addListener('stop', () => {
 			this.isScanning = false;
-			this._pokeCache = {};
+			this.pokeCache = {};
 			this.handleError(''); //clear errors
 			
 			clearInterval(this._scanInterval);
 		});
 		
-		this._chromeService.addNotificationListener((notificationId) => { //handle button click in notification
+		this._ioService.addNotificationListener((notificationId) => { //handle button click in notification
 			this.pokemonToIgnore[this._pokemonNotifications[notificationId].pokemonId] = true;
-			this._chromeService.storageSet('pokemonToIgnore', this.pokemonToIgnore);
-			this._chromeService.clearNotification(notificationId);
+			this._ioService.storageSet('pokemonToIgnore', this.pokemonToIgnore);
+			this._ioService.clearNotification(notificationId);
 		});
 		
-		this._chromeService.addListener('resetIgnore', () => {
+		this._ioService.addListener('resetIgnore', () => {
 			this.pokemonToIgnore = {};
-			this._chromeService.storageSet('pokemonToIgnore', {});
+			this._ioService.storageSet('pokemonToIgnore', {});
 		});
 		
-		this._chromeService.addListener('pokevision', () => {
-			this._chromeService.openTab(this._pokemonService.getPokevisionUrl(this.latitude, this.longitude));
+		this._ioService.addListener('pokevision', () => {
+			this._ioService.openTab(this._pokemonService.getPokevisionUrl(this.latitude, this.longitude));
 		});
 		
-		this._chromeService.getGeolocation().then(coords => {
+		this._ioService.getGeolocation().then(coords => {
 			this.latitude = coords.latitude;
 			this.longitude = coords.longitude;
 		});
@@ -79,13 +79,15 @@ class App {
 		
 		var newMons = {};
 		pokemon.forEach(p => {
-			if(!this._pokeCache[p.id] && this.isInRangeAndNotIgnored(p)) {
-				this.notify(p);
+			if(this.isInRangeAndNotIgnored(p)) {
+				if(!this.pokeCache[p.id])
+					this.notify(p);
+				newMons[p.id] = p.pokemonId;
 			}
-			newMons[p.id] = true;
 		});
 
-		this._pokeCache = newMons;
+		this.pokeCache = newMons;
+		this._ioService.reportNearbyPokemon(this.pokeCache);
 	}
 	
 	notify(pokemon) {
@@ -96,7 +98,7 @@ class App {
 		var iconUrl = this._pokemonService.getSpriteUrl(pokemon.pokemonId);
 			
 		this._pokemonNotifications[pokemon.id] = pokemon;
-		this._chromeService.createNotification(pokemon.id, title, message, iconUrl, [{
+		this._ioService.createNotification(pokemon.id, title, message, iconUrl, [{
 			title: `Click here to ignore ${name}s from now on`
 		}]);
 	}
@@ -119,6 +121,6 @@ class App {
 		}
 		
 		this.error = err;
-		this._chromeService.reportError(err);
+		this._ioService.reportError(err);
 	}
 }

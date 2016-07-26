@@ -11,6 +11,10 @@ class ChromeService {
 		chrome.runtime.sendMessage({error: err});	
 	}
 	
+	reportNearbyPokemon(pokemon) {
+		chrome.runtime.sendMessage({nearbyPokemon: pokemon});
+	}
+	
 	createNotification(notificationId, title, message, iconUrl, buttons) {
 		var opt = {
 		    type: "basic",

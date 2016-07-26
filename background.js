@@ -1,4 +1,4 @@
-var chromeService = new ChromeService();
-var pokemonService = new PokemonService();
+var ioService = new ChromeService();
+var pokemonService = new PokevisionService();
 
-window.App = new App(pokemonService, chromeService);
+window.App = new App(pokemonService, ioService);

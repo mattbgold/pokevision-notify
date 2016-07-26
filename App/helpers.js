@@ -81,4 +81,18 @@ class Helpers {
 		// Wait for either the retries to succeed, or the timeout to be hit.
 		return Promise.race([operation, overallTimeout]);
 	}
+	
+	static distinctObjects(objArray, propsToCheck)
+	{
+		var newArray = [];
+		objArray.forEach(o => {
+			//if none of the elemnts in the newArrayMatch
+			var matches = newArray.filter(n => propsToCheck.every(prop => n[prop] === o[prop]));
+			
+			if (matches.length == 0) {
+				newArray.push(o);
+			}
+		});
+		return newArray;
+	}
 }

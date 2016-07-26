@@ -3,6 +3,7 @@
   <head>
     <title>Pokemon Go: Spawn Notifications</title>
 	<script src="jquery-2.0.2.min.js"></script>
+	<script src="App/ChromeService.js"></script>
 	<script src="popup.js"></script>
 	<link rel="stylesheet" href="bootstrap.min.css"/>
 	<link rel="stylesheet" href="bootstrap-theme.min.css"/>
@@ -18,8 +19,8 @@
 		</div>
 	</div>
 	</nav>
+	
 	<div class="container card">
-
 		<p>Show Pokemon within <input type="text" maxlength="4" value="100" id="txtMeters" class="param meters form-control"/> meters.</p>
 		<p>Location: <a href="#" id="lnkLocation"> Your current location</a></p>
 		
@@ -51,9 +52,11 @@
 			<button id="resetIgnore" class="btn btn-warning btn-sm">Reset Ignored Pokemon</button>
 		</div>
 	</div>
-	
+	<div class="card container nearby-pokemon">
+		<h4>Nearby Pokemon</h4>
+		<div class="nearby-pokemon-list"></div>
+	</div>
 	<div id="error" class="card alert alert-danger"></div>
-		
 		
 	<div class="pull-right">
 			<a href="#" id="lnkOpen" class="btn btn-link">Open in PokeVision.com</a>
